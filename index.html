@@ -883,12 +883,12 @@
                     doc.text(`Receipt ${index + 1} of ${allReceipts.length}`, 15, 28);
 
                     try {
-                        // Center the receipt image on the page
-                        const imgWidth = 150;
-                        const imgHeight = 200;
+                        // Center the receipt image on the page - scaled down for readability
+                        const imgWidth = 100;
+                        const imgHeight = 130;
                         const pageWidth = doc.internal.pageSize.getWidth();
                         const startX = (pageWidth - imgWidth) / 2;
-                        const startY = 40;
+                        const startY = 50;
 
                         doc.addImage(receipt.data, 'JPEG', startX, startY, imgWidth, imgHeight);
                     } catch (e) {
