@@ -245,6 +245,8 @@
             position: relative;
             display: flex;
             justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
         .receipt-thumbnail img {
@@ -253,6 +255,14 @@
             border-radius: 4px;
             display: block;
             object-fit: contain;
+        }
+
+        .receipt-info {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 6px;
+            text-align: center;
+            font-weight: 600;
         }
 
         .remove-receipt {
@@ -486,12 +496,14 @@
 
         function displayReceipt(day, receipt) {
             const displayContainer = document.getElementById(`receipt-display-${day}`);
+            const receiptNumber = dayReceipts[day].length;
             
             const receiptDiv = document.createElement("div");
             receiptDiv.className = "receipt-thumbnail";
             receiptDiv.id = `receipt-${receipt.id}`;
             receiptDiv.innerHTML = `
                 <img src="${receipt.data}" alt="Receipt">
+                <div class="receipt-info">Receipt #${receiptNumber}</div>
                 <button class="remove-receipt" onclick="removeReceipt('${day}', ${receipt.id})">✕ Remove Receipt</button>
             `;
             displayContainer.appendChild(receiptDiv);
@@ -849,7 +861,7 @@
             doc.text("Issue 2", 145, y + 33, { align: "center" });
             doc.text("October 2020", 280, y + 33, { align: "right" });
 
-            // Add Receipts Pages - one receipt per page
+            // Add Receipts Pages - one receipt per page with clear numbering
             let hasReceipts = false;
             for (let day in dayReceipts) {
                 if (dayReceipts[day].length > 0) {
@@ -871,16 +883,21 @@
                 allReceipts.forEach((receipt, index) => {
                     doc.addPage();
                     
-                    // Header
+                    // Header with larger receipt number
                     doc.setFont("Helvetica", "bold");
                     doc.setFontSize(16);
                     doc.setTextColor(...red);
-                    doc.text("Receipt Attachment", 15, 20);
+                    doc.text("Receipt Attachment", 15, 18);
+                    
+                    doc.setFont("Helvetica", "bold");
+                    doc.setFontSize(20);
+                    doc.setTextColor(...red);
+                    doc.text(`#${index + 1}`, 15, 30);
                     
                     doc.setFont("Helvetica", "normal");
                     doc.setFontSize(10);
                     doc.setTextColor(...darkGrey);
-                    doc.text(`Receipt ${index + 1} of ${allReceipts.length}`, 15, 28);
+                    doc.text(`(${index + 1} of ${allReceipts.length})`, 15, 37);
 
                     try {
                         // Center the receipt image on the page - scaled down for readability
